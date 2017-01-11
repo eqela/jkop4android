@@ -1,0 +1,79 @@
+repositories {
+	jcenter()
+	flatDir {
+		dirs 'libs'
+	}
+}
+
+buildscript {
+	repositories {
+		jcenter()
+		flatDir {
+			dirs 'libs'
+		}
+	}
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.2.0'
+		
+    }
+}
+
+
+apply plugin: 'com.android.library'
+
+android.libraryVariants.all { variant ->
+	def fext = ".aar"
+
+
+	variant.generateBuildConfig.sourceOutputDir = new File('buildConfig')
+	variant.outputs.each { output ->
+		def file = output.outputFile
+		output.outputFile = new File(file.parent, "org.jkop.jkop4android" + fext)
+	}
+}
+
+android {
+	compileSdkVersion 25
+	buildToolsVersion '25.0.2'
+	
+
+	defaultConfig {
+		minSdkVersion 15
+		targetSdkVersion 25
+		
+		
+	}
+
+	
+
+	sourceSets {
+		main {
+			java.srcDirs = ['src']
+			res.srcDirs = ['res']
+			assets.srcDirs = ['assets']
+			jniLibs.srcDirs = ['libs']
+			manifest.srcFile 'AndroidManifest.xml'
+		}
+	}
+	
+
+	buildTypes {
+		release {
+			minifyEnabled false
+			proguardFile getDefaultProguardFile('proguard-android.txt')
+			
+		}
+	}
+
+	lintOptions {
+		abortOnError false
+	}
+
+	dependencies {
+		compile fileTree(dir: 'libs', include: ['*.jar'])
+		
+		
+		
+	}
+}
